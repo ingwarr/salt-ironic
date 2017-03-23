@@ -1,0 +1,21 @@
+
+{% set server = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': ['ironic-api', 'ironic-conductor', 'python-ironicclient'],
+        'services': ['ironic-api', 'ironic-conductor'],
+        'notification': False,
+        'identity': {
+            'engine': 'noauth',
+            'region': 'RegionOne',
+        },
+    },
+    'RedHat': {
+        'pkgs': ['ironic-api', 'ironic-conductor', 'python-ironicclient'],
+        'services': ['ironic-api', 'ironic-conductor'],
+        'notification': False,
+        'identity': {
+            'engine': 'noauth',
+            'region': 'RegionOne',
+        },
+    },
+}, merge=pillar.ironic.get('server', {})) %}
