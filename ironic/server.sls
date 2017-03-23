@@ -4,6 +4,15 @@
 ironic_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
+  - requre:
+    - mysql
+
+ironic_python_packages:
+  pip.installed:
+  - name: pymysql
+  - upgrade: True
+  - watch:
+    - ironic_packages
 
 /etc/ironic/ironic.conf:
   file.managed:
