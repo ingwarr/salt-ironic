@@ -39,6 +39,11 @@ auth_strategy = noauth
 # present on your system may be found by enumerating the
 # "ironic.drivers" entrypoint. An example may be found in the
 # developer documentation online. (list value)
+# TODO(pas-ha) if anything, do not enable *_ssh drivers,
+# at least resort to *_libvirt ones from ironic-staging-drivers
+# FIXME(pas-ha) always add fake driver, costs nothing but can help with
+# migrating exising active nodes under ironic,
+# and tempest API tests rely on it being enabled.
 {% if testing | bool == true %}
 enabled_drivers = agent_ssh,pxe_ssh
 debug = true
@@ -436,6 +441,7 @@ debug = true
 # can be downloaded and deployed on the bare metal node after
 # booting agent ramdisk. This may be set according to the
 # memory consumed by the agent ramdisk image. (integer value)
+# FIXME(pas-ha) should really set this to some non-zero value
 #memory_consumed_by_agent=0
 
 # Whether the agent ramdisk should stream raw images directly
@@ -531,6 +537,7 @@ port={{ server.bind.port }}
 # If the API is operating behind a proxy, you will want to
 # change this to represent the proxy's URL. Defaults to None.
 # (string value)
+# TODO(pas-ha) set the haproxy here
 #public_endpoint=<None>
 
 # Number of workers for OpenStack Ironic API service. The
@@ -602,6 +609,11 @@ port={{ server.bind.port }}
 # current value from the keystone service catalog. (string
 # value)
 {% if server.bind.address == "0.0.0.0" %}
+# FIXME(pas-ha) WRONG! this will be passed to agent as base URL to contact
+# Ironic API by, and 127.0.0.1 will obviously fail the actual deployment,
+# and is suitable for API-only tests.
+# An actual address by which nodes can reach the Ironic API from the
+# provisioning/cleaning network must always be set here.
 api_url=http://127.0.0.1:{{ server.bind.port }}
 {%- else %}
 api_url=http://{{ server.bind.address }}:{{ server.bind.port }}
@@ -727,8 +739,8 @@ api_url=http://{{ server.bind.address }}:{{ server.bind.port }}
 # start. (integer value)
 #subprocess_timeout=10
 
-{% if enable_cors | bool == true %}
 [cors]
+{% if enable_cors | bool == true %}
 allowed_origin = {{ cors_allowed_origin | default('allowed_origin=http://localhost:8000') }}
 allow_credentials = {{ enable_cors_credential_support | default('true') }}
 {% else %}
@@ -938,6 +950,8 @@ http_root = {{ server.http_boot_folder }}
 # ramdisk (defaults to 10 for the GenericHardwareManager). If
 # set to 0, will not run during cleaning. (integer value)
 # Deprecated group/name - [agent]/agent_erase_devices_priority
+# TODO(pas-ha) set this to 0 for testing, and to some pretty low number for
+# prod
 #erase_devices_priority=<None>
 
 # Number of iterations to be run for erasing devices. (integer
@@ -945,6 +959,7 @@ http_root = {{ server.http_boot_folder }}
 # Deprecated group/name - [agent]/agent_erase_devices_iterations
 #erase_devices_iterations=1
 
+# TODO(pas-ha) add erase_devices_metadata_priority
 
 [dhcp]
 
@@ -1228,6 +1243,7 @@ use_web_server_for_images = {{ server.webserver_use }}
 
 [inspector]
 
+# TODO(pas-ha) enable inspector, for underlay
 #
 # Options defined in ironic.drivers.modules.inspector
 #
@@ -1361,7 +1377,7 @@ use_web_server_for_images = {{ server.webserver_use }}
 region_name={{ server.identity.region }}
 
 [keystone_authtoken]
-
+# TODO(pas-ha) rewrite for normal keystoneauth plugins (available since Newton)
 #
 # Options defined in keystonemiddleware.auth_token
 #
@@ -2101,10 +2117,12 @@ tftp_root = /tftpboot
 # On ironic-conductor node, directory where master TFTP images
 # are stored on disk. Setting to <None> disables image
 # caching. (string value)
+# FIXME(pas-ha) set correct path to server.tftp.root_directory
 #tftp_master_path=/tftpboot/master_images
 
+# TODO(pas-ha) 
 # Bootfile DHCP parameter. (string value)
-{% if server.ipxe_enabled is defined and server.ipxe_enabled | bool == true %}
+{% if server.ipxe_enabled | default(false) | bool %}
 ipxe_enabled = true
 ipxe_boot_script = /etc/ironic/boot.ipxe
 pxe_append_params = systemd.journald.forward_to_console=yes {{ server.extra_kernel_options | default('') }}
