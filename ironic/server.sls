@@ -7,6 +7,14 @@ ironic_packages:
   - requre:
     - mysql
 
+
+ironic_keep_sample_cfg:
+  cmd.run:
+  - names:
+    - mv /etc/ironic/ironic.conf /etc/ironic/ironic.conf.sample
+  - require:
+    - pkg: ironic_packages
+
 {# in upstream Ubuntu Xenial repos, python-ironic package already depends on python-pymysql #}
 {# TODO(pas-ha) refine the suitable OS selection #}
 {%- if grains.osfinger != 'Ubuntu-16.04' %}
@@ -23,7 +31,7 @@ ironic_python_packages:
   - source: salt://ironic/files/{{ server.version }}/ironic.conf.{{ grains.os_family }}
   - template: jinja
   - require:
-    - pkg: ironic_packages
+    - cmd: ironic_keep_sample_cfg
 
 ironic_install_database:
   cmd.run:

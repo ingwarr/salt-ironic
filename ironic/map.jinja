@@ -1,7 +1,8 @@
 
 {% set server = salt['grains.filter_by']({
     'Debian': {
-        'pkgs': ['ironic-api', 'ironic-conductor', 'python-ironicclient'],
+        'pkgs': ['ipmitool', 'python-libvirt', 'ironic-api', 'ironic-conductor', 'python-ironicclient'],
+	{# TODO(Ingwarr) make conditions for standalone and cloud cases for services #}
         'services': ['ironic-api', 'ironic-conductor'],
         'notification': False,
         'identity': {
@@ -10,7 +11,8 @@
         },
     },
     'RedHat': {
-        'pkgs': ['ironic-api', 'ironic-conductor', 'python-ironicclient'],
+        'pkgs': ['ipmitool', 'python-libvirt', 'ironic-api', 'ironic-conductor', 'python-ironicclient'],
+	{# TODO(Ingwarr) make conditions for standalone and cloud cases for services #}
         'services': ['ironic-api', 'ironic-conductor'],
         'notification': False,
         'identity': {
