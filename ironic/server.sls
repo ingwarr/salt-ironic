@@ -7,6 +7,13 @@ ironic_packages:
   - requre:
     - mysql
 
+ironic_keep_sample_cfg:
+  cmd.run:
+  - names:
+    - mv /etc/ironic/ironic.conf /etc/ironic/ironic.conf.sample
+  - require:
+    - pkg: ironic_packages 
+    
 # pip_upgrade:
 #   pip.installed:
 #   - name: pip
@@ -26,7 +33,8 @@ ironic_packages:
   - source: salt://ironic/files/{{ server.version }}/ironic.conf.{{ grains.os_family }}
   - template: jinja
   - require:
-    - pkg: ironic_packages
+    - cmd: ironic_keep_sample_cfg:
+ 
 
 ironic_install_database:
   cmd.run:
