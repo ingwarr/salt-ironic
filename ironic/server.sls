@@ -7,12 +7,19 @@ ironic_packages:
   - requre:
     - mysql
 
-ironic_python_packages:
-  pip.installed:
-  - name: pymysql
-  - upgrade: True
-  - watch:
-    - ironic_packages
+# pip_upgrade:
+#   pip.installed:
+#   - name: pip
+#   - upgrade: True
+#   - watch:
+#     - ironic_packages
+ 
+# ironic_python_packages:
+#   pip.installed:
+#   - name: pymysql
+#   - upgrade: True
+#   - watch:
+#     - pip_upgrade
 
 /etc/ironic/ironic.conf:
   file.managed:
