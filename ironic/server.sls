@@ -11,7 +11,7 @@ ironic_packages:
 ironic_keep_sample_cfg:
   cmd.run:
   - names:
-    - mv /etc/ironic/ironic.conf /etc/ironic/ironic.conf.sample
+    - if [ -e /etc/ironic/ironic.conf  ]; then  mv /etc/ironic/ironic.conf /etc/ironic/ironic.conf.sample ; fi
   - require:
     - pkg: ironic_packages
 
