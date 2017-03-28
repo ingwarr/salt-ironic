@@ -3,7 +3,6 @@
       enabled: true
       version: mitaka
       testing: false
-      enabled_drivers: pxe_ipmitool,agent_ipmitool,agent_ssh,pxe_ssh
 #      extra_kernel_options: ''
       deployment_address: 10.0.175.2
       file_url_port: 8080

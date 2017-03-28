@@ -44,14 +44,13 @@ auth_strategy = noauth
 # FIXME(pas-ha) always add fake driver, costs nothing but can help with
 # migrating exising active nodes under ironic,
 # and tempest API tests rely on it being enabled.
-{% if server.testing %}
-enabled_drivers = agent_ssh,pxe_ssh
+{% if server.testing | default(false) %}
+enabled_drivers = fake,agent_ssh,pxe_ssh
 debug = true
 {% else %}
-enabled_drivers = {{ server.enabled_drivers }}
+enabled_drivers = fake,{{ server.drivers | join(',', attribute='engine') }}
 debug = true
 {% endif %}
-#enabled_drivers = {% for driver in server.drivers %}{{ driver.engine }}{% if not loop.last %},{% endif %}{% endfor %}
 
 
 #
