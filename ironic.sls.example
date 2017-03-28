@@ -40,7 +40,7 @@
       enable_cors: false
       tftp:
         host: 0.0.0.0
-	root_directory: /tftpboot
+        root_directory: /tftpboot
       drivers:
         - engine: pxe_ipmitool
         - engine: agent_ipmitool

@@ -10,7 +10,7 @@
 # authentication will be disabled. (string value)
 # Possible values: noauth, keystone
 
-{% if server.enable_keystone is defined and server.enable_keystone | bool == true %}
+{% if server.enable_keystone | default(false) %}
 auth_strategy = keystone
 {% else %}
 auth_strategy = noauth
@@ -44,7 +44,7 @@ auth_strategy = noauth
 # FIXME(pas-ha) always add fake driver, costs nothing but can help with
 # migrating exising active nodes under ironic,
 # and tempest API tests rely on it being enabled.
-{% if testing | bool == true %}
+{% if server.testing %}
 enabled_drivers = agent_ssh,pxe_ssh
 debug = true
 {% else %}
@@ -740,9 +740,9 @@ api_url=http://{{ server.bind.address }}:{{ server.bind.port }}
 #subprocess_timeout=10
 
 [cors]
-{% if enable_cors | bool == true %}
-allowed_origin = {{ cors_allowed_origin | default('allowed_origin=http://localhost:8000') }}
-allow_credentials = {{ enable_cors_credential_support | default('true') }}
+{% if server.enable_cors %}
+allowed_origin = {{ server.cors_allowed_origin | default('http://localhost:8000') }}
+allow_credentials = {{ server.enable_cors_credential_support | default(true) }}
 {% else %}
 [cors]
 {% endif %}
@@ -1373,7 +1373,7 @@ use_web_server_for_images = {{ server.webserver_use }}
 # The region used for getting endpoints of OpenStack services.
 # (string value)
 
-{% if server.enable_keystone | bool == true %}
+{% if server.enable_keystone | default(false) %}
 region_name={{ server.identity.region }}
 
 [keystone_authtoken]
@@ -2122,7 +2122,7 @@ tftp_root = /tftpboot
 
 # TODO(pas-ha) 
 # Bootfile DHCP parameter. (string value)
-{% if server.ipxe_enabled | default(false) | bool %}
+{% if server.ipxe_enabled | default(false) %}
 ipxe_enabled = true
 ipxe_boot_script = /etc/ironic/boot.ipxe
 pxe_append_params = systemd.journald.forward_to_console=yes {{ server.extra_kernel_options | default('') }}
