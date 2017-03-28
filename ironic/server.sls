@@ -40,4 +40,19 @@ ironic_install_database:
   - require:
     - file: /etc/ironic/ironic.conf
 
+ironic-api:
+  service.running:
+    - enable: true
+    - full_restart: true
+    - watch:
+      - file: /etc/ironic/ironic.conf
+
+ironic-conductor:
+  service.running:
+    - enable: true
+    - full_restart: true
+    - watch:
+      - file: /etc/ironic/ironic.conf
+
+
 {%- endif %}
