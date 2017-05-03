@@ -2123,7 +2123,7 @@ tftp_root = /tftpboot
 # Bootfile DHCP parameter. (string value)
 {% if server.ipxe_enabled | default(false) %}
 ipxe_enabled = true
-ipxe_boot_script = /etc/ironic/boot.ipxe
+ipxe_boot_script = {{ server.ipxe_boot_script | default('/etc/ironic/boot.ipxe') }}
 pxe_append_params = systemd.journald.forward_to_console=yes {{ server.extra_kernel_options | default('') }}
 pxe_config_template = $pybasedir/drivers/modules/ipxe_config.template
 pxe_bootfile_name = undionly.kpxe
