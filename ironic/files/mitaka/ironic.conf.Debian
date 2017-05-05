@@ -48,7 +48,7 @@ auth_strategy = noauth
 enabled_drivers = fake,agent_ssh,pxe_ssh
 debug = true
 {% else %}
-enabled_drivers = fake,{{ server.drivers | join(',', attribute='engine') }}
+enabled_drivers = {{ server.drivers | join(',', attribute='engine') }}
 debug = true
 {% endif %}
 
