@@ -607,7 +607,7 @@ port={{ server.bind.port }}
 # URL of Ironic API service. If not set ironic can get the
 # current value from the keystone service catalog. (string
 # value)
-{% if server.bind.address == "0.0.0.0" %}
+{% if server.bind.get('api_url_address', server.bind.address) == "0.0.0.0" %}
 # FIXME(pas-ha) WRONG! this will be passed to agent as base URL to contact
 # Ironic API by, and 127.0.0.1 will obviously fail the actual deployment,
 # and is suitable for API-only tests.
@@ -615,7 +615,7 @@ port={{ server.bind.port }}
 # provisioning/cleaning network must always be set here.
 api_url=http://127.0.0.1:{{ server.bind.port }}
 {%- else %}
-api_url=http://{{ server.bind.address }}:{{ server.bind.port }}
+api_url=http://{{ server.bind.get('api_url_address', server.bind.address) }}:{{ server.bind.port }}
 {% endif %}
 
 

@@ -13,7 +13,7 @@ parameters:
         port: 3306
         name: ironic
         user: ironic
-        password: ${_param:mysql_ironic_password}  
+        password: ${_param:mysql_ironic_password}
       identity:
         engine: keystone
         region: ${_param:openstack_region}
@@ -25,6 +25,7 @@ parameters:
       bind:
         address: ${_param:single_address}
         port: 6385
+        api_url_address: ${_param:single_address}
       message_queue:
         engine: rabbitmq
         host: ${_param:single_address}
