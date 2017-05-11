@@ -704,7 +704,11 @@ api_url=http://{{ server.bind.get('api_url_address', server.bind.address) }}:{{ 
 # are trusted (eg, because there is only one tenant), this
 # option could be safely disabled. (boolean value)
 # Deprecated group/name - [conductor]/clean_nodes
+{%- if 'automated_clean' in server %}
+automated_clean={{ server.automated_clean }}
+{%- else %}
 #automated_clean=true
+{%- endif %}
 
 # Timeout (seconds) to wait for a callback from the ramdisk
 # doing the cleaning. If the timeout is reached the node will
